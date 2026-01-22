@@ -1,10 +1,10 @@
-package gdx.liftoff.android;
+package io.hunterthecraft.strategy.android;
 
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import gdx.liftoff.Main;
+import io.hunterthecraft.strategy.Main;
 
 /** Launches the Android application. */
 public class AndroidLauncher extends AndroidApplication {

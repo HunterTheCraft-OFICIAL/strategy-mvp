@@ -1,4 +1,4 @@
-package gdx.liftoff;
+package io.hunterthecraft.strategy;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Texture;
