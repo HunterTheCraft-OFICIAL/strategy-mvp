@@ -2,7 +2,6 @@ package io.hunterthecraft.strategy.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -13,6 +12,7 @@ public class LoadingScreen implements Screen {
     private SpriteBatch batch;
     private Texture logo;
     private float progress = 0f;
+    private boolean hasSwitched = false; // Evita múltiplas trocas
 
     public LoadingScreen(Main game) {
         this.game = game;
@@ -26,15 +26,20 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // Simula carregamento (substitua por lógica real depois)
-        if (progress < 1f) {
-            progress += delta * 0.5f; // Ajuste a velocidade aqui
-        } else {
-            game.setScreen(new MainMenuScreen(game));
-            dispose();
+        // Só processa se ainda não trocou de tela
+        if (!hasSwitched) {
+            // Simula carregamento
+            if (progress < 1f) {
+                progress += delta * 0.5f; // Ajuste a velocidade aqui
+            } else {
+                // Troca para o menu principal
+                game.setScreen(new MainMenuScreen(game));
+                hasSwitched = true;
+                return; // Importante: sai antes de renderizar
+            }
         }
 
-        // Renderiza fundo
+        // Renderiza tela de carregamento
         ScreenUtils.clear(0.1f, 0.1f, 0.15f, 1f);
         
         batch.begin();
@@ -71,7 +76,9 @@ public class LoadingScreen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {}
+    public void hide() {
+        dispose();
+    }
 
     @Override
     public void dispose() {
