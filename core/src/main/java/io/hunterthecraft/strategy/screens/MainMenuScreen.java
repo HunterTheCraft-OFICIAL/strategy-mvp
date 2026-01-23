@@ -2,7 +2,6 @@ package io.hunterthecraft.strategy.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -27,13 +26,12 @@ public class MainMenuScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
         font = new BitmapFont();
-        logo = new Texture("libgdx.png"); // Use seu ícone real depois
+        logo = new Texture("libgdx.png");
 
-        // Define posições dos botões
         int screenWidth = Gdx.graphics.getWidth();
         int screenHeight = Gdx.graphics.getHeight();
 
-        // Logo no topo (centralizado)
+        // Logo no topo
         float logoWidth = 400f;
         float logoHeight = 200f;
         float logoX = (screenWidth - logoWidth) / 2f;
@@ -47,9 +45,9 @@ public class MainMenuScreen implements Screen {
         float startX = (screenWidth - totalWidth) / 2f;
 
         // Linha 1 (BTN1-BTN4)
-        float startY1 = logoY - btnHeight - 50f;        for (int i = 0; i < 4; i++) {
-            buttonX[i] = startX + i * (btnWidth + btnSpacing);
-            buttonY[i] = startY1;
+        float startY1 = logoY - btnHeight - 50f;
+        for (int i = 0; i < 4; i++) {
+            buttonX[i] = startX + i * (btnWidth + btnSpacing);            buttonY[i] = startY1;
             buttonWidth[i] = btnWidth;
             buttonHeight[i] = btnHeight;
         }
@@ -66,7 +64,6 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // Fundo escuro
         ScreenUtils.clear(0.1f, 0.1f, 0.15f, 1f);
 
         batch.begin();
@@ -78,28 +75,28 @@ public class MainMenuScreen implements Screen {
 
         // Desenha botões
         for (int i = 0; i < 8; i++) {
-            // Cor de fundo do botão
+            // Fundo do botão
             batch.setColor(0.3f, 0.3f, 0.4f, 1f);
             batch.draw(logo, buttonX[i], buttonY[i], buttonWidth[i], buttonHeight[i]);
 
             // Texto do botão
             batch.setColor(1f, 1f, 1f, 1f);
             String text = getButtonText(i);
-            float textWidth = font.getWrappedBounds(text, 300f).width;
-            float textX = buttonX[i] + (buttonWidth[i] - textWidth) / 2f;
+            float textX = buttonX[i] + buttonWidth[i] / 2f;
             float textY = buttonY[i] + buttonHeight[i] / 2f + 10f;
-            font.draw(batch, text, textX, textY);
+            float textWidth = font.getGlyphLayout().setText(text).width;
+            font.draw(batch, text, textX - textWidth / 2f, textY);
         }
 
         batch.end();
 
-        // Detecta toque nos botões
+        // Detecta toque
         if (Gdx.input.isTouched()) {
             float touchX = Gdx.input.getX();
-            float touchY = Gdx.graphics.getHeight() - Gdx.input.getY(); // Inverte Y
+            float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
             for (int i = 0; i < 8; i++) {
-                if (touchX > buttonX[i] && touchX < buttonX[i] + buttonWidth[i] &&
-                    touchY > buttonY[i] && touchY < buttonY[i] + buttonHeight[i]) {
+                if (touchX >= buttonX[i] && touchX <= buttonX[i] + buttonWidth[i] &&                    touchY >= buttonY[i] && touchY <= buttonY[i] + buttonHeight[i]) {
                     handleButtonPress(i);
                     break;
                 }
@@ -123,11 +120,10 @@ public class MainMenuScreen implements Screen {
 
     private void handleButtonPress(int index) {
         switch (index) {
-            case 0: // Novo Jogo
+            case 0:
                 Gdx.app.log("Menu", "Iniciando novo jogo...");
-                // Aqui você irá para a tela de jogo
                 break;
-            case 3: // Sair
+            case 3:
                 Gdx.app.exit();
                 break;
             default:
@@ -145,11 +141,11 @@ public class MainMenuScreen implements Screen {
     @Override
     public void resume() {}
 
-    @Override    public void hide() {}
+    @Override
+    public void hide() {}
 
     @Override
-    public void dispose() {
-        if (batch != null) batch.dispose();
+    public void dispose() {        if (batch != null) batch.dispose();
         if (font != null) font.dispose();
         if (logo != null) logo.dispose();
     }
