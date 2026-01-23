@@ -79,13 +79,12 @@ public class MainMenuScreen implements Screen {
             batch.setColor(0.3f, 0.3f, 0.4f, 1f);
             batch.draw(logo, buttonX[i], buttonY[i], buttonWidth[i], buttonHeight[i]);
 
-            // Texto do botão
+            // Texto do botão (centralizado de forma simples)
             batch.setColor(1f, 1f, 1f, 1f);
             String text = getButtonText(i);
-            float textX = buttonX[i] + buttonWidth[i] / 2f;
+            float textX = buttonX[i] + 20f; // Margem esquerda
             float textY = buttonY[i] + buttonHeight[i] / 2f + 10f;
-            float textWidth = font.getGlyphLayout().setText(text).width;
-            font.draw(batch, text, textX - textWidth / 2f, textY);
+            font.draw(batch, text, textX, textY);
         }
 
         batch.end();
@@ -96,8 +95,8 @@ public class MainMenuScreen implements Screen {
             float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
             for (int i = 0; i < 8; i++) {
-                if (touchX >= buttonX[i] && touchX <= buttonX[i] + buttonWidth[i] &&                    touchY >= buttonY[i] && touchY <= buttonY[i] + buttonHeight[i]) {
-                    handleButtonPress(i);
+                if (touchX >= buttonX[i] && touchX <= buttonX[i] + buttonWidth[i] &&
+                    touchY >= buttonY[i] && touchY <= buttonY[i] + buttonHeight[i]) {                    handleButtonPress(i);
                     break;
                 }
             }
@@ -145,8 +144,8 @@ public class MainMenuScreen implements Screen {
     public void hide() {}
 
     @Override
-    public void dispose() {        if (batch != null) batch.dispose();
-        if (font != null) font.dispose();
+    public void dispose() {
+        if (batch != null) batch.dispose();        if (font != null) font.dispose();
         if (logo != null) logo.dispose();
     }
 }
