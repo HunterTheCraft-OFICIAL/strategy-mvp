@@ -39,41 +39,64 @@ public class MapScreen implements Screen {
         }
     }
 
-    @Override
-    public void render(float delta) {
-        ScreenUtils.clear(0.1f, 0.1f, 0.2f, 1);
+@Override
+public void render(float delta) {
+    ScreenUtils.clear(0.1f, 0.1f, 0.2f, 1);
 
-        camera.update();
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+    camera.update();
+    shapeRenderer.setProjectionMatrix(camera.combined);
 
-        if (countries != null) {            for (Country country : countries) {
-                if (country == null || country.polygons == null) continue;
-                Color color = getColorForCountry(country.name);
-                shapeRenderer.setColor(color);
+    // Garante que o renderer esteja pronto
+    if (!shapeRenderer.isDrawing()) {
+        try {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        } catch (Exception e) {
+            Gdx.app.error("MapScreen", "Falha ao iniciar ShapeRenderer", e);
+            return;
+        }
+    }
 
-                for (List<Vector2> polygon : country.polygons) {
-                    if (polygon == null || polygon.size() < 3) continue;
-                    float[] points = new float[polygon.size() * 2];
-                    boolean valid = true;
-                    for (int i = 0; i < polygon.size(); i++) {
-                        Vector2 v = polygon.get(i);
-                        if (v == null) {
-                            valid = false;
-                            break;
-                        }
-                        points[i * 2] = v.x;
-                        points[i * 2 + 1] = v.y;
+    try {
+        for (Country country : countries) {
+            Color color = getColorForCountry(country.name);
+            shapeRenderer.setColor(color);
+
+            for (List<Vector2> polygon : country.polygons) {
+                if (polygon == null || polygon.size() < 3) continue;
+
+                float[] points = new float[polygon.size() * 2];
+                boolean valid = true;
+                for (int i = 0; i < polygon.size(); i++) {
+                    Vector2 v = polygon.get(i);
+                    if (v == null || Float.isNaN(v.x) || Float.isNaN(v.y)) {
+                        valid = false;
+                        break;
                     }
-                    if (valid) {
-                        shapeRenderer.polygon(points);
-                    }
+                    points[i * 2] = v.x;
+                    points[i * 2 + 1] = v.y;
+                }
+
+                if (valid) {
+                    shapeRenderer.polygon(points);
                 }
             }
         }
+    } catch (Exception e) {
+        Gdx.app.error("MapScreen", "Erro durante renderização", e);
+        // Tenta fechar seguro
+        if (shapeRenderer.isDrawing()) {
+            shapeRenderer.end();
+        }
+        // Volta ao menu
+        game.setScreen(new MainMenuScreen(game));
+        return;
+    }
 
+    // Fecha o renderer com segurança
+    if (shapeRenderer.isDrawing()) {
         shapeRenderer.end();
     }
+}
 
     private Color getColorForCountry(String name) {
         int hash = name.hashCode();
