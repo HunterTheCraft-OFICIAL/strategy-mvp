@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.hunterthecraft.strategy.Main;
+import io.hunterthecraft.strategy.screens.MapScreen; // ← IMPORT ADICIONADO
 
 public class MainMenuScreen implements Screen {
     private Main game;
@@ -17,6 +18,8 @@ public class MainMenuScreen implements Screen {
     private float[] buttonY = new float[8];
     private float[] buttonWidth = new float[8];
     private float[] buttonHeight = new float[8];
+    
+    private MapScreen mapScreen; // ← CAMPO ADICIONADO
 
     public MainMenuScreen(Main game) {
         this.game = game;
@@ -44,10 +47,10 @@ public class MainMenuScreen implements Screen {
         float totalWidth = (4 * btnWidth) + (3 * btnSpacing);
         float startX = (screenWidth - totalWidth) / 2f;
 
-        // Linha 1 (BTN1-BTN4)
-        float startY1 = logoY - btnHeight - 50f;
+        // Linha 1 (BTN1-BTN4)        float startY1 = logoY - btnHeight - 50f;
         for (int i = 0; i < 4; i++) {
-            buttonX[i] = startX + i * (btnWidth + btnSpacing);            buttonY[i] = startY1;
+            buttonX[i] = startX + i * (btnWidth + btnSpacing);
+            buttonY[i] = startY1;
             buttonWidth[i] = btnWidth;
             buttonHeight[i] = btnHeight;
         }
@@ -79,10 +82,10 @@ public class MainMenuScreen implements Screen {
             batch.setColor(0.3f, 0.3f, 0.4f, 1f);
             batch.draw(logo, buttonX[i], buttonY[i], buttonWidth[i], buttonHeight[i]);
 
-            // Texto do botão (centralizado de forma simples)
+            // Texto do botão
             batch.setColor(1f, 1f, 1f, 1f);
             String text = getButtonText(i);
-            float textX = buttonX[i] + 20f; // Margem esquerda
+            float textX = buttonX[i] + 20f;
             float textY = buttonY[i] + buttonHeight[i] / 2f + 10f;
             font.draw(batch, text, textX, textY);
         }
@@ -93,10 +96,10 @@ public class MainMenuScreen implements Screen {
         if (Gdx.input.isTouched()) {
             float touchX = Gdx.input.getX();
             float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
-
             for (int i = 0; i < 8; i++) {
                 if (touchX >= buttonX[i] && touchX <= buttonX[i] + buttonWidth[i] &&
-                    touchY >= buttonY[i] && touchY <= buttonY[i] + buttonHeight[i]) {                    handleButtonPress(i);
+                    touchY >= buttonY[i] && touchY <= buttonY[i] + buttonHeight[i]) {
+                    handleButtonPress(i);
                     break;
                 }
             }
@@ -121,6 +124,10 @@ public class MainMenuScreen implements Screen {
         switch (index) {
             case 0:
                 Gdx.app.log("Menu", "Iniciando novo jogo...");
+                if (mapScreen == null) {
+                    mapScreen = new MapScreen(game);
+                }
+                game.setScreen(mapScreen);
                 break;
             case 3:
                 Gdx.app.exit();
@@ -139,13 +146,15 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resume() {}
-
     @Override
-    public void hide() {}
+    public void hide() {
+        // Não dispose do mapScreen aqui — ele gerencia seus próprios recursos
+    }
 
     @Override
     public void dispose() {
-        if (batch != null) batch.dispose();        if (font != null) font.dispose();
+        if (batch != null) batch.dispose();
+        if (font != null) font.dispose();
         if (logo != null) logo.dispose();
     }
 }

@@ -1,0 +1,100 @@
+.
+├── README.md
+├── android
+│   ├── AndroidManifest.xml
+│   ├── build.gradle
+│   ├── ic_launcher-web.png
+│   ├── proguard-rules.pro
+│   ├── project.properties
+│   ├── res
+│   │   ├── drawable-anydpi-v26
+│   │   │   ├── ic_launcher.xml
+│   │   │   ├── ic_launcher.xml.bak
+│   │   │   ├── ic_launcher_foreground.xml.bak
+│   │   │   └── ic_launcher_round.xml
+│   │   ├── drawable-hdpi
+│   │   │   ├── ic_launcher.png
+│   │   │   ├── ic_launcher_background.png
+│   │   │   ├── ic_launcher_foreground.png
+│   │   │   └── ic_launcher_round.png
+│   │   ├── drawable-mdpi
+│   │   │   ├── ic_launcher.png
+│   │   │   ├── ic_launcher_background.png
+│   │   │   ├── ic_launcher_foreground.png
+│   │   │   └── ic_launcher_round.png
+│   │   ├── drawable-xhdpi
+│   │   │   ├── ic_launcher.png
+│   │   │   ├── ic_launcher_background.png
+│   │   │   ├── ic_launcher_foreground.png
+│   │   │   └── ic_launcher_round.png
+│   │   ├── drawable-xxhdpi
+│   │   │   ├── ic_launcher.png
+│   │   │   ├── ic_launcher_background.png
+│   │   │   ├── ic_launcher_foreground.png
+│   │   │   └── ic_launcher_round.png
+│   │   ├── drawable-xxxhdpi
+│   │   │   ├── ic_launcher.png
+│   │   │   ├── ic_launcher_background.png
+│   │   │   ├── ic_launcher_foreground.png
+│   │   │   └── ic_launcher_round.png
+│   │   └── values
+│   │       ├── color.xml
+│   │       ├── strings.xml
+│   │       └── styles.xml
+│   └── src
+│       └── main
+│           └── java
+│               └── io
+│                   └── hunterthecraft
+│                       └── strategy
+│                           └── android
+│                               └── AndroidLauncher.java
+├── assets
+│   ├── com
+│   │   └── badlogic
+│   │       └── gdx
+│   │           └── utils
+│   │               ├── lsans-15.fnt
+│   │               └── lsans-15.png
+│   ├── data
+│   │   └── countries.geo.json
+│   ├── libgdx.png
+│   └── ui
+│       ├── font-list.fnt
+│       ├── font-subtitle.fnt
+│       ├── font-window.fnt
+│       ├── font.fnt
+│       ├── uiskin.atlas
+│       ├── uiskin.json
+│       └── uiskin.png
+├── assetss
+│   └── data
+├── build.gradle
+├── core
+│   ├── build.gradle
+│   └── src
+│       └── main
+│           └── java
+│               └── io
+│                   └── hunterthecraft
+│                       └── strategy
+│                           ├── Main.java
+│                           ├── Main.java.bak
+│                           └── screens
+│                               ├── LoadingScreen.java
+│                               ├── LoadingScreen.java.bak
+│                               ├── MainMenuScreen.java
+│                               └── MainMenuScreen.java.bak
+├── gradle
+│   ├── gradle-daemon-jvm.properties
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+├── local.properties
+├── settings.gradle
+└── tree-.libGDX-Projects.strategy-mvp.txt
+
+36 directories, 62 files
