@@ -31,13 +31,20 @@ public class MapScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
         countries = CountryLoader.loadCountries();
 
-        // Se falhou, volta ao menu em 2 segundos
-        if (countries.isEmpty()) {
-            Gdx.app.postRunnable(() -> {
-                game.setScreen(new MainMenuScreen(game));
-            });
-        }
+// Se falhou, mostra tela de debug
+if (countries.isEmpty()) {
+    Gdx.app.postRunnable(() -> {
+        try {
+            // Força um erro para testar
+            throw new RuntimeException("Mapa vazio: countries.geo.json não carregado ou inválido");
+} catch (Exception e) {
+    Gdx.app.error("MapScreen", "Erro durante renderização", e);
+    if (shapeRenderer.isDrawing()) {
+        shapeRenderer.end();
     }
+    game.setScreen(new DebugScreen(game, e));
+    return;
+}
 
 @Override
 public void render(float delta) {
