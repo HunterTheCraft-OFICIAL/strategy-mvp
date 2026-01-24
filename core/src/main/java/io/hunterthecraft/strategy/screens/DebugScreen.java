@@ -3,7 +3,6 @@ package io.hunterthecraft.strategy.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -83,7 +82,7 @@ public class DebugScreen implements Screen {
         viewport.update(width, height, true);
     }
 
-    @@Override
+    @Override
     public void pause() {}
 
     @Override
