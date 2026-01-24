@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.hunterthecraft.strategy.Main;
-import io.hunterthecraft.strategy.screens.MapScreen; // ← IMPORT ADICIONADO
+import io.hunterthecraft.strategy.screens.MapScreen;
 
 public class MainMenuScreen implements Screen {
     private Main game;
@@ -19,7 +19,7 @@ public class MainMenuScreen implements Screen {
     private float[] buttonWidth = new float[8];
     private float[] buttonHeight = new float[8];
     
-    private MapScreen mapScreen; // ← CAMPO ADICIONADO
+    private MapScreen mapScreen;
 
     public MainMenuScreen(Main game) {
         this.game = game;
@@ -147,9 +147,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void resume() {}
     @Override
-    public void hide() {
-        // Não dispose do mapScreen aqui — ele gerencia seus próprios recursos
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
