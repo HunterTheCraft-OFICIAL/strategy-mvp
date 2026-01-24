@@ -11,6 +11,7 @@ import io.hunterthecraft.strategy.Main;
 import io.hunterthecraft.strategy.data.Country;
 import io.hunterthecraft.strategy.data.CountryLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapScreen implements Screen {
@@ -46,8 +47,8 @@ public class MapScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0.1f, 0.1f, 0.2f, 1);
 
-        camera.update();
-        shapeRenderer.setProjectionMatrix(camera.combined);
+        camera.update();        shapeRenderer.setProjectionMatrix(camera.combined);
+
         if (!shapeRenderer.isDrawing()) {
             try {
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -61,34 +62,44 @@ public class MapScreen implements Screen {
         try {
             for (Country country : countries) {
                 if (country == null || country.polygons == null) continue;
+
                 Color color = getColorForCountry(country.name);
                 shapeRenderer.setColor(color);
 
                 for (List<Vector2> polygon : country.polygons) {
                     if (polygon == null || polygon.size() < 3) continue;
 
-                    float[] points = new float[polygon.size() * 2];
-                    boolean valid = true;
-                    for (int i = 0; i < polygon.size(); i++) {
-                        Vector2 v = polygon.get(i);
-                        if (v == null || Float.isNaN(v.x) || Float.isNaN(v.y)) {
-                            valid = false;
+                    // Reconstrói o array com validação rigorosa
+                    List<Float> validPoints = new ArrayList<>();
+                    boolean skipPolygon = false;
+
+                    for (Vector2 v : polygon) {
+                        if (v == null) {
+                            skipPolygon = true;
                             break;
                         }
-                        points[i * 2] = v.x;
-                        points[i * 2 + 1] = v.y;
+                        float x = v.x;
+                        float y = v.y;
+                        if (Float.isNaN(x) || Float.isInfinite(x) || Float.isNaN(y) || Float.isInfinite(y)) {
+                            skipPolygon = true;
+                            break;
+                        }
+                        validPoints.add(x);
+                        validPoints.add(y);
                     }
 
-                    // Validação final: deve ser > 0, par, e ter pelo menos 3 pontos
-                    if (valid && points.length > 0 && points.length % 2 == 0) {
-                        if (points.length < 6) {
-                            Gdx.app.log("MapScreen", "Polígono ignorado: menos de 3 pontos (" + points.length/2 + ") para país " + country.name);
-                        } else {
-                            shapeRenderer.polygon(points);
-                        }
-                    } else {
-                        Gdx.app.log("MapScreen", "Polígono ignorado: tamanho inválido (" + points.length + ") para país " + country.name);
+                    if (skipPolygon || validPoints.size() < 6 || validPoints.size() % 2 != 0) {
+                        Gdx.app.log("MapScreen", "Polígono ignorado: país=" + country.name + ", pontos=" + validPoints.size());
+                        continue;
                     }
+
+                    // Converte para array primitivo
+                    float[] points = new float[validPoints.size()];
+                    for (int i = 0; i < validPoints.size(); i++) {
+                        points[i] = validPoints.get(i);                    }
+
+                    // Renderiza
+                    shapeRenderer.polygon(points);
                 }
             }
         } catch (Exception e) {
@@ -96,7 +107,8 @@ public class MapScreen implements Screen {
             if (shapeRenderer.isDrawing()) {
                 shapeRenderer.end();
             }
-            game.setScreen(new DebugScreen(game, e));            return;
+            game.setScreen(new DebugScreen(game, e));
+            return;
         }
 
         if (shapeRenderer.isDrawing()) {
@@ -133,5 +145,4 @@ public class MapScreen implements Screen {
         if (shapeRenderer != null) {
             shapeRenderer.dispose();
         }
-    }
-}
+    }}
