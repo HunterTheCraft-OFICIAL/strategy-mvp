@@ -79,11 +79,15 @@ public class MapScreen implements Screen {
                         points[i * 2 + 1] = v.y;
                     }
 
-                    // Validação crítica: array deve ter tamanho par e >= 6 (3 pontos)
-                    if (valid && points.length >= 6 && points.length % 2 == 0) {
-                        shapeRenderer.polygon(points);
+                    // Validação final: deve ser > 0, par, e ter pelo menos 3 pontos
+                    if (valid && points.length > 0 && points.length % 2 == 0) {
+                        if (points.length < 6) {
+                            Gdx.app.log("MapScreen", "Polígono ignorado: menos de 3 pontos (" + points.length/2 + ") para país " + country.name);
+                        } else {
+                            shapeRenderer.polygon(points);
+                        }
                     } else {
-                        Gdx.app.log("MapScreen", "Polígono ignorado: tamanho=" + points.length + ", país=" + country.name);
+                        Gdx.app.log("MapScreen", "Polígono ignorado: tamanho inválido (" + points.length + ") para país " + country.name);
                     }
                 }
             }
@@ -92,11 +96,11 @@ public class MapScreen implements Screen {
             if (shapeRenderer.isDrawing()) {
                 shapeRenderer.end();
             }
-            game.setScreen(new DebugScreen(game, e));
-            return;
+            game.setScreen(new DebugScreen(game, e));            return;
         }
 
-        if (shapeRenderer.isDrawing()) {            shapeRenderer.end();
+        if (shapeRenderer.isDrawing()) {
+            shapeRenderer.end();
         }
     }
 
