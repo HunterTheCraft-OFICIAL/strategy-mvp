@@ -11,14 +11,14 @@ import io.hunterthecraft.strategy.Main;
 import io.hunterthecraft.strategy.data.Country;
 import io.hunterthecraft.strategy.data.CountryLoader;
 
-import java.util.List; // ← IMPORT ADICIONADO
+import java.util.List;
 
 public class MapScreen implements Screen {
 
     private Main game;
     private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
-    private List<Country> countries; // ← agora é java.util.List
+    private List<Country> countries;
 
     public MapScreen(Main game) {
         this.game = game;
@@ -29,7 +29,14 @@ public class MapScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         shapeRenderer = new ShapeRenderer();
-        countries = CountryLoader.loadCountries(); // ← sem Array<>
+        countries = CountryLoader.loadCountries();
+
+        // Se falhou, volta ao menu em 2 segundos
+        if (countries.isEmpty()) {
+            Gdx.app.postRunnable(() -> {
+                game.setScreen(new MainMenuScreen(game));
+            });
+        }
     }
 
     @Override
@@ -40,18 +47,28 @@ public class MapScreen implements Screen {
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        for (Country country : countries) {
-            Color color = getColorForCountry(country.name);
-            shapeRenderer.setColor(color);
+        if (countries != null) {            for (Country country : countries) {
+                if (country == null || country.polygons == null) continue;
+                Color color = getColorForCountry(country.name);
+                shapeRenderer.setColor(color);
 
-            for (List<Vector2> polygon : country.polygons) {
-                if (polygon.size() < 3) continue;
-                float[] points = new float[polygon.size() * 2];
-                for (int i = 0; i < polygon.size(); i++) {
-                    points[i * 2] = polygon.get(i).x;
-                    points[i * 2 + 1] = polygon.get(i).y;
+                for (List<Vector2> polygon : country.polygons) {
+                    if (polygon == null || polygon.size() < 3) continue;
+                    float[] points = new float[polygon.size() * 2];
+                    boolean valid = true;
+                    for (int i = 0; i < polygon.size(); i++) {
+                        Vector2 v = polygon.get(i);
+                        if (v == null) {
+                            valid = false;
+                            break;
+                        }
+                        points[i * 2] = v.x;
+                        points[i * 2 + 1] = v.y;
+                    }
+                    if (valid) {
+                        shapeRenderer.polygon(points);
+                    }
                 }
-                shapeRenderer.polygon(points);
             }
         }
 
@@ -79,8 +96,7 @@ public class MapScreen implements Screen {
     @Override
     public void resume() {}
 
-    @Override
-    public void hide() {}
+    @Override    public void hide() {}
 
     @Override
     public void dispose() {
