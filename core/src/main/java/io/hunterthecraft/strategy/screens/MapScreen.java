@@ -31,7 +31,6 @@ public class MapScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
         countries = CountryLoader.loadCountries();
 
-        // Se falhou, mostra tela de debug
         if (countries.isEmpty()) {
             Gdx.app.postRunnable(() -> {
                 try {
@@ -47,8 +46,8 @@ public class MapScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0.1f, 0.1f, 0.2f, 1);
 
-        camera.update();        shapeRenderer.setProjectionMatrix(camera.combined);
-
+        camera.update();
+        shapeRenderer.setProjectionMatrix(camera.combined);
         if (!shapeRenderer.isDrawing()) {
             try {
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -80,8 +79,11 @@ public class MapScreen implements Screen {
                         points[i * 2 + 1] = v.y;
                     }
 
-                    if (valid) {
+                    // Validação crítica: array deve ter tamanho par e >= 6 (3 pontos)
+                    if (valid && points.length >= 6 && points.length % 2 == 0) {
                         shapeRenderer.polygon(points);
+                    } else {
+                        Gdx.app.log("MapScreen", "Polígono ignorado: tamanho=" + points.length + ", país=" + country.name);
                     }
                 }
             }
@@ -94,9 +96,9 @@ public class MapScreen implements Screen {
             return;
         }
 
-        if (shapeRenderer.isDrawing()) {
-            shapeRenderer.end();
-        }    }
+        if (shapeRenderer.isDrawing()) {            shapeRenderer.end();
+        }
+    }
 
     private Color getColorForCountry(String name) {
         int hash = name.hashCode();
