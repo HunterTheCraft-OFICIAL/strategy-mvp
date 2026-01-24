@@ -34,28 +34,23 @@ public class MainMenuScreen implements Screen {
         int screenWidth = Gdx.graphics.getWidth();
         int screenHeight = Gdx.graphics.getHeight();
 
-        // Logo no topo
         float logoWidth = 400f;
         float logoHeight = 200f;
-        float logoX = (screenWidth - logoWidth) / 2f;
         float logoY = screenHeight - logoHeight - 50f;
 
-        // Botões (4 por linha)
         float btnWidth = 200f;
         float btnHeight = 80f;
         float btnSpacing = 20f;
         float totalWidth = (4 * btnWidth) + (3 * btnSpacing);
         float startX = (screenWidth - totalWidth) / 2f;
 
-        // Linha 1 (BTN1-BTN4)        float startY1 = logoY - btnHeight - 50f;
+        float startY1 = logoY - btnHeight - 50f;
         for (int i = 0; i < 4; i++) {
             buttonX[i] = startX + i * (btnWidth + btnSpacing);
-            buttonY[i] = startY1;
-            buttonWidth[i] = btnWidth;
+            buttonY[i] = startY1;            buttonWidth[i] = btnWidth;
             buttonHeight[i] = btnHeight;
         }
 
-        // Linha 2 (BTN5-BTN8)
         float startY2 = startY1 - btnHeight - 30f;
         for (int i = 0; i < 4; i++) {
             buttonX[i + 4] = startX + i * (btnWidth + btnSpacing);
@@ -72,17 +67,15 @@ public class MainMenuScreen implements Screen {
         batch.begin();
 
         // Desenha logo
-        batch.draw(logo, 
-                   (Gdx.graphics.getWidth() - logo.getWidth()) / 2f, 
-                   Gdx.graphics.getHeight() - logo.getHeight() - 50f);
+        batch.draw(logo,
+                (Gdx.graphics.getWidth() - logo.getWidth()) / 2f,
+                Gdx.graphics.getHeight() - logo.getHeight() - 50f);
 
         // Desenha botões
         for (int i = 0; i < 8; i++) {
-            // Fundo do botão
             batch.setColor(0.3f, 0.3f, 0.4f, 1f);
             batch.draw(logo, buttonX[i], buttonY[i], buttonWidth[i], buttonHeight[i]);
 
-            // Texto do botão
             batch.setColor(1f, 1f, 1f, 1f);
             String text = getButtonText(i);
             float textX = buttonX[i] + 20f;
@@ -103,8 +96,7 @@ public class MainMenuScreen implements Screen {
                     break;
                 }
             }
-        }
-    }
+        }    }
 
     private String getButtonText(int index) {
         switch (index) {
@@ -146,13 +138,13 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resume() {}
+
     @Override
     public void hide() {}
 
     @Override
     public void dispose() {
         if (batch != null) batch.dispose();
-        if (font != null) font.dispose();
-        if (logo != null) logo.dispose();
+        if (font != null) font.dispose();        if (logo != null) logo.dispose();
     }
 }

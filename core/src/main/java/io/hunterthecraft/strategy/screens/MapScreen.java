@@ -21,42 +21,12 @@ public class MapScreen implements Screen {
         this.game = game;
     }
 
-@Override
-public void show() {
-    batch = new SpriteBatch();
-    font = new BitmapFont();
-    logo = new Texture("libgdx.png");
-
-    int screenWidth = Gdx.graphics.getWidth();
-    int screenHeight = Gdx.graphics.getHeight();
-
-    float logoWidth = 400f;
-    float logoHeight = 200f;
-    float logoX = (screenWidth - logoWidth) / 2f;
-    float logoY = screenHeight - logoHeight - 50f;
-
-    float btnWidth = 200f;
-    float btnHeight = 80f;
-    float btnSpacing = 20f;
-    float totalWidth = (4 * btnWidth) + (3 * btnSpacing);
-    float startX = (screenWidth - totalWidth) / 2f;
-
-    float startY1 = logoY - btnHeight - 50f;
-    for (int i = 0; i < 4; i++) {
-        buttonX[i] = startX + i * (btnWidth + btnSpacing);
-        buttonY[i] = startY1;
-        buttonWidth[i] = btnWidth;
-        buttonHeight[i] = btnHeight;
+    @Override
+    public void show() {
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        shapeRenderer = new ShapeRenderer();
     }
-
-    float startY2 = startY1 - btnHeight - 30f;
-    for (int i = 0; i < 4; i++) {
-        buttonX[i + 4] = startX + i * (btnWidth + btnSpacing);
-        buttonY[i + 4] = startY2;
-        buttonWidth[i + 4] = btnWidth;
-        buttonHeight[i + 4] = btnHeight;
-    }
-}
 
     @Override
     public void render(float delta) {
