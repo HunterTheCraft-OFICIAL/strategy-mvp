@@ -5,19 +5,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-
 import java.util.ArrayList;
 import java.util.List;
-
-public class Country {
-    public final String name;
-    public final List<List<Vector2>> polygons;
-
-    public Country(String name, List<List<Vector2>> polygons) {
-        this.name = name;
-        this.polygons = polygons;
-    }
-}
 
 public class CountryLoader {
     public static List<Country> loadCountries() {
@@ -38,18 +27,16 @@ public class CountryLoader {
             JsonValue coords = geometry.get("coordinates");
             List<List<Vector2>> polygons = new ArrayList<>();
 
-            // Primeiro anel (exterior)
             JsonValue ring = coords.get(0);
             List<Vector2> points = new ArrayList<>();
             for (JsonValue coord : ring) {
                 float lon = coord.get(0).asFloat();
                 float lat = coord.get(1).asFloat();
-                float x = (lon + 180) * 2.0f; // 0 a 720
-                float y = (lat + 90) * 2.0f;  // 0 a 360
+                float x = (lon + 180) * 2.0f;
+                float y = (lat + 90) * 2.0f;
                 points.add(new Vector2(x, y));
             }
             polygons.add(points);
-
             countries.add(new Country(name, polygons));
         }
 

@@ -7,17 +7,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.Array;
 import io.hunterthecraft.strategy.Main;
 import io.hunterthecraft.strategy.data.Country;
 import io.hunterthecraft.strategy.data.CountryLoader;
+
+import java.util.List; // ← IMPORT ADICIONADO
 
 public class MapScreen implements Screen {
 
     private Main game;
     private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
-    private Array<Country> countries;
+    private List<Country> countries; // ← agora é java.util.List
 
     public MapScreen(Main game) {
         this.game = game;
@@ -28,7 +29,7 @@ public class MapScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         shapeRenderer = new ShapeRenderer();
-        countries = new Array<>(CountryLoader.loadCountries());
+        countries = CountryLoader.loadCountries(); // ← sem Array<>
     }
 
     @Override
